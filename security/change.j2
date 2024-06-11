@@ -1,0 +1,24 @@
+{% extends "base.j2" %}
+{% from 'macros/form.j2' import base, btn %}
+
+{% block content %}
+  <section class="main__jumbotron">
+    <h3 class="main__title">{{ _fsdomain('Change password') }}</h3>
+    <form class="form" action="{{ url_for_security('change_password') }}" method="post" name="change_password_form">
+      {{ change_password_form.hidden_tag() }}
+      {% if active_password %}
+        {{ base(change_password_form.password) }}
+      {% else %}
+        <h3>{{ _fsdomain('You do not currently have a password - this will add one.') }}</h3>
+      {% endif %}
+      {{ base(change_password_form.new_password) }}
+      {{ base(change_password_form.new_password_confirm) }}
+      {{ btn(change_password_form.submit) }}
+    </form>
+    <footer class="main__footer">
+      <p class="main__links">
+        <a class="link" href="{{ url_for_security('login') }}{%- if 'next' in request.args -%}?next={{ request.args.next|urlencode }}{%- endif -%}">{{ _fsdomain('Login') }}</a>
+      </p>
+    </footer>
+  </section>
+{% endblock content %}
