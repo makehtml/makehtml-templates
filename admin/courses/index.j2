@@ -1,0 +1,30 @@
+{% extends "admin/base.j2" %}
+{% from 'macros/form.j2' import base, btn, render_field_errors %}
+
+{% block admin_content %}
+  <h1>{{ _('Courses') }}</h1>
+  {% if courses %}
+    <div class="row">
+      {% for course in courses %}
+        <div class="col-lg-4 col-md-6 col-12 mb-4">
+          <a class="custom-block shadow-lg w-100 {% if course.disabled %}bg-dark-subtle{% else %}bg-white{% endif %}" href="{{ url_for('admin_courses.edit', course_id=course.id) }}">
+            <div class="d-flex gap-1">
+              <div>
+                <h5 class="mb-2">
+                  <code>{{ course.id }}</code> {{ course.title }}<br>
+                  <small>({{ _('batch') }}: {% if course.batch %}{{ course.batch }}{% else %}1{% endif %})</small>
+                </h5>
+                <p class="mb-0">{{ course.description }}</p>
+              </div>
+              <span class="badge bg-design rounded-pill ms-auto">{{ course.weeks | count }}</span>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <hr class="my-4">
+  <nav class="nav">
+    <a class="nav-link" href="{{ url_for('admin_courses.add') }}">{{ _('Add course') }}</a>
+  </nav>
+{% endblock admin_content %}

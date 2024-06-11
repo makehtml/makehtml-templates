@@ -1,0 +1,18 @@
+{% extends "base.j2" %}
+{% from 'macros/form.j2' import base, btn %}
+
+{% block content %}
+  <section class="main__jumbotron">
+    <h3 class="main__title">{{ _fsdomain('Resend confirmation instructions') }}</h3>
+    <form class="form" action="{{ url_for_security('send_confirmation') }}" method="post" name="send_confirmation_form">
+      {{ send_confirmation_form.hidden_tag() }}
+      {{ base(send_confirmation_form.email) }}
+      {{ btn(send_confirmation_form.submit) }}
+    </form>
+    <footer class="main__footer">
+      <p class="main__links">
+        <a class="link" href="{{ url_for_security('login') }}{%- if 'next' in request.args -%}?next={{ request.args.next|urlencode }}{%- endif -%}">{{ _fsdomain('Login') }}</a>
+      </p>
+    </footer>
+  </section>
+{% endblock content %}

@@ -1,0 +1,50 @@
+{% extends "admin/base.j2" %}
+
+{% block admin_content %}
+  <h2>{{ _('Users and roles') }}</h2>
+  <table class="table table-striped table-hover">
+    <tr>
+      <th>ID</th>
+      <th>{{ _('Email') }}</th>
+      <th>{{ _('Username') }}</th>
+      <th>{{ _('Roles') }}</th>
+      <th>{{ _('Confirmed at') }}</th>
+      <th>{{ _('Was invited by') }}</th>
+      <th>{{ _('Invitations left') }}</th>
+    </tr>
+    {% for user in users %}
+      <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          {% if user.confirmed_at %}
+            {% set icon_name = 'user-active' %}
+          {% else %}
+            {% set icon_name = 'user' %}
+          {% endif %}
+          {{ icon(icon_name, width=20, height=20) }} {{ user.username }}
+        </td>
+        <td>
+          <a href="{{ url_for('admin.user_roles', user_id=user.id) }}">{{ _('change') }}</a>
+          [
+          {% for role in user.roles %}
+            {{ role.name }}
+            {% if not loop.last %},{% endif %}
+          {% endfor %}
+          ]
+        </td>
+        <td>
+          {% if user.confirmed_at %}
+            {{ user.confirmed_at | datetimeformat }}
+          {% else %}
+            {{ _('Not yet confirmed') }}
+          {% endif %}
+        </td>
+        <td>
+          {{ user.invited_by }}
+        </td>
+        <td><b>{{ user.invitations | count }}</b>: {% for i in user.invitations %}{{ i.code }}{% if not loop.last %}, {% endif %}{% endfor %}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock admin_content %}

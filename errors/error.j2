@@ -1,0 +1,12 @@
+{% extends "base.j2" %}
+
+{% block content %}
+  <div class="container py-4">
+    <section class="p-5 bg-body-tertiary border rounded-3">
+      <h2>{{ title }}</h2>
+      <p>{{ message }}</p>
+      {% if link %}Попробуйте <a href="{{ link }}">ещё раз</a>.{% endif %}
+      <div hidden>{{ error }}</div>
+    </section>
+  </div>
+{% endblock content %}

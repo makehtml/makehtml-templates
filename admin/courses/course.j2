@@ -1,0 +1,52 @@
+{% extends "admin/base.j2" %}
+{% from 'macros/form.j2' import bs_btn, bs_checkbox, bs_text, render_field_errors %}
+
+{% block admin_content %}
+  <h1>{{ title }}</h1>
+  <form action="{{ action }}" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ render_field_errors(form.csrf_token) }}
+    {{ bs_text(form.title) }}
+    {{ bs_text(form.alias) }}
+    {{ bs_text(form.description) }}
+    {{ bs_text(form.text, rows=5, floating_label=False) }}
+    {{ bs_text(form.batch) }}
+    {{ bs_text(form.order) }}
+    {{ bs_checkbox(form.disabled) }}
+    <fieldset>
+      <legend>{{ _('SEO') }}</legend>
+      {{ bs_text(form.meta_title) }}
+      {{ bs_text(form.meta_description) }}
+    </fieldset>
+    {{ bs_btn(form.submit, value=btn_text) }}
+  </form>
+  {% if weeks %}
+    <hr class="my-4">
+    {% for week in weeks %}
+      <div class="d-flex gap-3 align-items-end">
+        <div>
+          <h3><code>[неделя {{ loop.index }}]</code> {{ week.title }}</h3>
+          <p class="mb-0">{{ week.description }}</p>
+        </div>
+        <p>{{ week.number }}</p>
+        <p class="ms-auto"><input class="form-control" type="number" value="{{ week.order }}"></p>
+      </div>
+      {% for day in week.days %}
+        <div class="d-flex gap-1 ps-3">
+          <h5><code>[день {{ loop.index }}]</code> {{ day.title }}</h5>
+          <span class="ms-auto"><input class="form-control form-control-sm" type="number" value="{{ day.order }}"></span>
+        </div>
+      {% endfor %}
+      <p class="ps-3"><a href="{{ url_for('admin_courses.add_day', course_id=course_id, week_id=week.id) }}">{{ _('Add day to this course to this week') }}</a></p>
+    {% endfor %}
+    <p><a href="{{ url_for('admin_courses.add_week', course_id=course_id) }}">{{ _('Add week to this course') }}</a></p>
+  {% endif %}
+  <hr class="my-4">
+  <nav class="nav">
+    <a class="nav-link" href="{{ url_for('admin_courses.index') }}">{{ _('Back') }}</a>
+    {% if course_id %}
+      <a class="nav-link" href="{{ url_for('admin_courses.add_week') }}">{{ _('Add week') }}</a>
+      <a class="nav-link" href="{{ url_for('admin_courses.add_day', course_id=course_id) }}">{{ _('Add day to this course') }}</a>
+    {% endif %}
+  </nav>
+{% endblock admin_content %}

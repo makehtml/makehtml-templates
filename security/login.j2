@@ -1,0 +1,75 @@
+{% extends "base.j2" %}
+{% from 'macros/form.j2' import base, btn, checkbox, prop_next, render_field_errors %}
+{% from 'macros/form.j2' import bs_btn, bs_checkbox, bs_text %}
+
+{% block content %}
+  <style>
+    .igt {
+      padding-top: 0.8rem;
+      padding-bottom: 1.0rem;
+      align-self: self-start;
+      font-size: 18px;
+    }
+  </style>
+  <div class="container py-4">
+    <section class="p-5 bg-body-tertiary border rounded-3">
+      <h3 class="main__title">{{ _fsdomain('Login') }}</h3>
+      <form class="form" action="{{ url_for_security('login') }}{{ prop_next() }}" method="post" name="login_user_form">
+        {{ login_user_form.hidden_tag() }}
+        {{ render_field_errors(login_user_form.csrf) }}
+        {{ render_field_errors(login_user_form.email) }}
+        {{ render_field_errors(login_user_form.username) }}
+        {{ render_field_errors(login_user_form.password) }}
+        {{ render_field_errors(login_user_form.remember) }}
+        <div class="input-group mb-3">
+          {% if 'email' in identity_attributes %}
+            {{ bs_text(login_user_form.email) }}
+            <span class="input-group-text igt">{{ _('or') }}</span>
+          {% endif %}
+          {% if login_user_form.username and 'username' in identity_attributes %}
+            {{ bs_text(login_user_form.username) }}
+          {% endif %}
+        </div>
+        {{ bs_text(login_user_form.password) }}
+        {{ bs_checkbox(login_user_form.remember) }}
+        {{ bs_btn(login_user_form.submit) }}
+      </form>
+      {% if security.webauthn %}
+        <hr class="fs-gap">
+        <h2>{{ _fsdomain("Use WebAuthn to Sign In") }}</h2>
+        <div>
+          <form method="get" id="wan-signin-form" name="wan_signin_form">
+            <input id="wan_signin" name="wan_signin" type="submit" value="{{ _fsdomain('Sign in with WebAuthn') }}" formaction="{{ url_for_security('wan_signin') }}{{ prop_next() }}">
+          </form>
+        </div>
+      {% endif %}
+      {% if security.oauthglue %}
+        <hr class="fs-gap">
+        <h2>{{ _fsdomain("Use Social Oauth to Sign In") }}</h2>
+        {% for provider in security.oauthglue.provider_names %}
+          <form method="post" id="{{ provider }}-form" name="{{ provider }}_form">
+            <input id="{{ provider }}" name="{{ provider }}" type="submit" value="{{ _fsdomain('Sign in with ')~provider }}" formaction="{{ url_for_security('oauthstart', name=provider) }}{{ prop_next() }}">
+          </form>
+        {% endfor %}
+      {% endif %}
+      <hr class="my-4">
+      <nav class="nav">
+        {% if security.registerable %}
+          <a class="nav-link" href="{{ url_for_security('register') }}{%- if 'next' in request.args -%}?next={{ request.args.next|urlencode }}{%- endif -%}">{{ _fsdomain('Register') }}</a>
+        {% endif %}
+        {% if security.recoverable %}<a class="nav-link" href="{{ url_for_security('forgot_password') }}">{{ _fsdomain('Forgot password') }}</a>{% endif %}
+        {% if security.confirmable %}<a class="nav-link" href="{{ url_for_security('send_confirmation') }}">{{ _fsdomain('Confirm account') }}</a>{% endif %}
+      </nav>
+    </section>
+  </div>
+{% endblock content %}
+
+{% block js %}
+  <script>
+    const form = document.querySelector('.form');
+    const submitBtn = form.querySelector('[type="submit"]');
+    form.addEventListener('submit', () => {
+      submitBtn.disabled = true;
+    });
+  </script>
+{% endblock js %}

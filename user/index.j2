@@ -1,0 +1,36 @@
+{% extends "admin/base.j2" %}
+
+{% block admin_content %}
+  <h1>{{ _('Personal user area') }}</h1>
+  <div class="flex">
+    <div class="h-full space-y-2 w-56">
+      <div class="w-48 text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+        {% for link in user_links %}
+          <a class="{%- if loop.first -%}rounded-t-lg{%- elif loop.last -%} rounded-b-lg{%- endif %} relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white" href="{{ url_for(link.controller) }}">
+            {{- link.title -}}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+    <ul>
+      <li><strong>{{ _('Username') }}</strong>: {{ current_user.username }}</li>
+      <li><strong>{{ _('Email') }}</strong>: {{ current_user.email }}</li>
+      <li><strong>{{ _('Date of registration') }}</strong>: {{ current_user.create_datetime | datetimeformat }}</li>
+      <li><strong>{{ _('Date of activation') }}</strong>: {{ current_user.confirmed_at | datetimeformat }}</li>
+      <li><strong>{{ _('Modification date') }}</strong>: {{ current_user.update_datetime | datetimeformat }}</li>
+      <li>
+        <strong>{{ _('Roles of user') }}</strong> ({{ current_user.roles | count }}):
+        {% for role in current_user.roles %}
+          {{ role.name }}
+          {% if not loop.last %},{% endif %}
+        {% endfor %}
+      </li>
+      <li>
+        <strong>{{ _('Invitation code') }}</strong> ({{ invitations | count }}):
+        {% if invitations | length %}
+          <code><a href="{{ url_for('core.index', invitation=invitations[0].code, _external=True) }}">{{ invitations[0].code }}</a></code>
+        {% endif %}
+      </li>
+    </ul>
+  </div>
+{% endblock admin_content %}

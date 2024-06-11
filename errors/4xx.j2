@@ -1,0 +1,13 @@
+{% extends "base.j2" %}
+
+{% block content %}
+  <div class="container py-4">
+    <section class="p-5 bg-body-tertiary border rounded-3">
+      <h2>{{ _('This page does not exist') }}</h2>
+      <p>
+        {{ _('Try searching for it from the %(open)shomepage%(close)s.', open='<a href="%s">' % url_for('core.index'), close='</a>') }}
+      </p>
+      <div hidden>{{ error }}</div>
+    </section>
+  </div>
+{% endblock content %}
