@@ -12,6 +12,7 @@
     {% if show_errors %}{{ errors(field.errors) }}{% endif %}
   </div>
 {%- endmacro %}
+
 {% macro errors(field) %}
   {% if field and field.errors %}
     <div class="fs-div" id="{{ field.id if field else 'fs-field' }}">
@@ -35,6 +36,7 @@
 {% macro prop_next() -%}
   {% if 'next' in request.args %}?next={{ request.args.next|urlencode }}{% endif %}
 {%- endmacro %}
+
 {% macro errors(errors, bem_block='form') -%}
   {% if errors %}
     <ul class="{{ bem_block }}__errors">
@@ -42,6 +44,7 @@
     </ul>
   {% endif %}
 {%- endmacro %}
+
 {% macro checkbox(field, bem_block='form') -%}
   <div class="{{ bem_block }}__control {{ bem_block }}__control--checkbox{% if field.errors %} {{ bem_block }}__control--error{% endif %}">
     {{ field(class='%s__checkbox' % bem_block) }}
@@ -49,6 +52,7 @@
     {{ errors(field.errors) }}
   </div>
 {%- endmacro %}
+
 {% macro radio(field, bem_block='form') -%}
   <div class="{{ bem_block }}__control {{ bem_block }}__control--radio{% if field.errors %} {{ bem_block }}__control--error{% endif %}">
     {{ field(class='%s__radio' % bem_block) }}
@@ -56,6 +60,7 @@
     {{ errors(field.errors) }}
   </div>
 {%- endmacro %}
+
 {% macro btn(field, bem_block='form') %}
   {{ field(class='%s__submit' % bem_block, **kwargs)|safe }}
 {% endmacro %}
@@ -67,7 +72,7 @@
 {% macro prop_next() -%}
   {% if 'next' in request.args %}?next={{ request.args.next|urlencode }}{% endif %}
 {%- endmacro %}
-{# TODO: пересмотреть и выкинуть -> ===================================== #}
+
 {% macro bs_base(field, floating_label=True) -%}
   <div class="mb-3{% if floating_label %} form-floating{% endif %}">
     {% set class_name = 'form-control is-invalid' if field.errors else 'form-control' %}
@@ -121,6 +126,7 @@
     {% endif %}
   </div>
 {%- endmacro %}
+
 {% macro render_text_with_errors(field, modifier=False) %}
   {% set class_name = 'form__text form__text--error' if field.errors else 'form__text' %}
   {% if modifier %}

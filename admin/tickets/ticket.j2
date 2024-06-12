@@ -1,5 +1,5 @@
 {% extends "admin/base.j2" %}
-{% from 'macros/form.j2' import base, btn, raw, render_field_errors %}
+{% from 'macros/form.j2' import base, bs_text, bs_btn, raw, render_field_errors %}
 
 {% block admin_content %}
   <h1>{{ title }}</h1>
@@ -32,9 +32,9 @@
     {% if ticket %}
       {{ raw(form.parent_id) }}
     {% else %}
-      {{ base(form.subject) }}
+      {{ bs_text(form.subject) }}
     {% endif %}
-    {{ base(form.message) }}
-    {{ btn(form.submit) }}
+    {{ bs_text(form.message) }}
+    {{ bs_btn(form.submit) }}
   </form>
 {% endblock admin_content %}

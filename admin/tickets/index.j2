@@ -7,12 +7,12 @@
     <section class="tickets">
       {% for ticket in tickets %}
         <article class="tickets__item{% if not ticket.is_answered %} tickets__item--new{% endif %}">
-          <h3 class="tickets__summary">
+          <h5 class="tickets__summary">
             <code>{{ ticket.id }}</code>
             {{ ticket.subject if ticket.subject else _('No subject') }}
             <small>{{ ticket.dt_created }} {{ ticket.user_from.email }}</small>
             <a href="{{ url_for('admin_tickets.details', ticket_id=ticket.id) }}">{{ _('Ticket details') }}</a>
-          </h3>
+          </h5>
         </article>
       {% endfor %}
     </section>

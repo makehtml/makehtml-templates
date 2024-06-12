@@ -1,12 +1,12 @@
 {% extends "admin/base.j2" %}
-{% from 'macros/form.j2' import base, btn, raw, render_field_errors %}
+{% from 'macros/form.j2' import base, bs_text, bs_btn, btn, raw, render_field_errors %}
 
 {% block admin_content %}
   <h1>{{ title }}</h1>
   <section class="tickets">
     {% if ticket %}
       <article class="tickets__item">
-        <h2>{{ ticket.subject if ticket.subject else _('No subject') }}</h2>
+        <h3>{{ ticket.subject if ticket.subject else _('No subject') }}</h3>
         <p>{{ ticket.message }}</p>
         <p class="tickets__details">
           <small>{{ _('Date') }}: {{ ticket.dt_created }}</small>
@@ -31,10 +31,10 @@
     {% if ticket %}
       {{ raw(form.parent_id) }}
     {% else %}
-      {{ base(form.subject) }}
+      {{ bs_text(form.subject) }}
     {% endif %}
-    {{ base(form.message) }}
-    {{ btn(form.submit) }}
-    {% if ticket %}<a class="tickets__btn" href="{{ url_for('tickets.archive', ticket_id=ticket.id) }}">Archive</a>{% endif %}
+    {{ bs_text(form.message) }}
+    {{ bs_btn(form.submit) }}
+    {% if ticket %}<a class="btn btn-secondary ml-2" href="{{ url_for('tickets.archive', ticket_id=ticket.id) }}">{{ _('Archive') }}</a>{% endif %}
   </form>
 {% endblock admin_content %}
