@@ -35,6 +35,6 @@
     {% endif %}
     {{ bs_text(form.message) }}
     {{ bs_btn(form.submit) }}
-    {% if ticket %}<a class="btn btn-secondary ml-2" href="{{ url_for('tickets.archive', ticket_id=ticket.id) }}">{{ _('Archive') }}</a>{% endif %}
+    {% if ticket %}<a class="btn btn-secondary ms-2" href="{{ url_for('tickets.archive', ticket_id=ticket.id) }}">{{ _('Archive') }}</a>{% endif %}
   </form>
 {% endblock admin_content %}
