@@ -21,14 +21,15 @@
       <li>
         <strong>{{ _('Roles of user') }}</strong> ({{ current_user.roles | count }}):
         {% for role in current_user.roles %}
-          {{ role.name }}
-          {% if not loop.last %},{% endif %}
+          {{ role.name }}{% if not loop.last %},{% endif %}
         {% endfor %}
       </li>
       <li>
         <strong>{{ _('Invitation code') }}</strong> ({{ invitations | count }}):
         {% if invitations | length %}
           <code><a href="{{ url_for('core.index', invitation=invitations[0].code, _external=True) }}">{{ invitations[0].code }}</a></code>
+        {% else %}
+          коды закончились
         {% endif %}
       </li>
     </ul>

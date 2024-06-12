@@ -28,8 +28,7 @@
           <a href="{{ url_for('admin.user_roles', user_id=user.id) }}">{{ _('change') }}</a>
           [
           {% for role in user.roles %}
-            {{ role.name }}
-            {% if not loop.last %},{% endif %}
+            {{ role.name }}{% if not loop.last %},{% endif %}
           {% endfor %}
           ]
         </td>
