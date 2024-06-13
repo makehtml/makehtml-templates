@@ -11,5 +11,6 @@
     {{ bs_text(form.lastname) }}
     {{ bs_text(form.phone) }}
     {{ bs_btn(form.submit) }}
+    <a class="ms-3" href="{{ url_for_security('change_password') }}">{{ _('Change password') }}</a>
   </form>
 {% endblock admin_content %}
