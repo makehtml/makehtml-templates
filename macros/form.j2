@@ -86,8 +86,8 @@
   {{ field(class='btn btn-primary', **kwargs)|safe }}
 {% endmacro %}
 
-{% macro bs_text(field, floating_label=True, size=None) -%}
-  <div class="{% if floating_label %}form-floating {% endif %}mb-3{% if field.errors %} has-validation{% endif %}">
+{% macro bs_text(field, floating_label=True, no_mb=False, size=None) -%}
+  <div class="{% if floating_label %}form-floating {% endif %}{% if not no_mb %}mb-3{% endif %}{% if field.errors %} has-validation{% endif %}">
     {% if field.errors %}
       {% set err_class = ' is-invalid' %}
     {% endif %}

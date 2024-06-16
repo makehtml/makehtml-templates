@@ -21,13 +21,13 @@
         {{ render_field_errors(login_user_form.username) }}
         {{ render_field_errors(login_user_form.password) }}
         {{ render_field_errors(login_user_form.remember) }}
-        <div class="input-group mb-3">
+        <div class="input-group flex-column flex-md-row mb-3">
           {% if 'email' in identity_attributes %}
-            {{ bs_text(login_user_form.email) }}
+            {{ bs_text(login_user_form.email, no_mb=True) }}
             <span class="input-group-text igt">{{ _('or') }}</span>
           {% endif %}
           {% if login_user_form.username and 'username' in identity_attributes %}
-            {{ bs_text(login_user_form.username) }}
+            {{ bs_text(login_user_form.username, no_mb=True) }}
           {% endif %}
         </div>
         {{ bs_text(login_user_form.password) }}
