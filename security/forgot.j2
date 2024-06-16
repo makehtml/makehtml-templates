@@ -3,7 +3,7 @@
 
 {% block content %}
   <div class="container py-4">
-    <section class="p-5 bg-body-tertiary border rounded-3">
+    <section class="p-3 p-sm-4 p-md-5 bg-body-tertiary border rounded-3">
       <h3 class="main__title">{{ _fsdomain('Send password reset instructions') }}</h3>
       <form class="form form--security" action="{{ url_for_security('forgot_password') }}" method="post" name="forgot_password_form">
         {{ forgot_password_form.hidden_tag() }}

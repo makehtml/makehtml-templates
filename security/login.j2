@@ -12,7 +12,7 @@
     }
   </style>
   <div class="container py-4">
-    <section class="p-5 bg-body-tertiary border rounded-3">
+    <section class="p-3 p-sm-4 p-md-5 bg-body-tertiary border rounded-3">
       <h3 class="main__title">{{ _fsdomain('Login') }}</h3>
       <form class="form" action="{{ url_for_security('login') }}{{ prop_next() }}" method="post" name="login_user_form">
         {{ login_user_form.hidden_tag() }}
