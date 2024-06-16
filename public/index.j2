@@ -9,11 +9,10 @@
           <h6 class="text-center">сложно о веб-разработке простым языком</h6>
 
           <form class="custom-form mt-4 pt-2 mb-lg-0 mb-5" action="{{ url_for_security('register') }}" method="get">
-            <div class="input-group input-group-lg">
-              <span class="input-group-text bi-shield-lock" id="basic-addon1"></span>
-
+            <div class="input-group input-group-lg flex-nowrap">
+              <i class="input-group-text bi-shield-lock d-none d-md-block"></i>
               <input class="form-control" name="invitation" type="text" id="invitation" placeholder="Код приглашения">
-              <button class="form-control" type="submit">Регистрация</button>
+              <button class="form-control" type="submit"><span class="d-none d-sm-block">Регистрация</span><i class="fs-2 bi bi-box-arrow-in-right d-block d-sm-none"></i></button>
             </div>
           </form>
         </div>
