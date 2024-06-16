@@ -1,7 +1,7 @@
 {% extends "base.j2" %}
 
 {% block content %}
-  <section class="topics-detail-section section-padding" id="topics-detail">
+  <section class="topics-detail-section section-padding" id="detail">
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-12 m-auto">
@@ -16,7 +16,7 @@
               <div class="accordion-item">
                 <h2 class="accordion-header">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelOpen-week-{{ week.id }}" aria-expanded="false" aria-controls="panelOpen-week-{{ week.id }}">
-                    <h4>{{ week.title }} <small>(неделя {{ loop.index }})</small></h4>
+                    <h4>{{ week.title }} <mark>(неделя {{ loop.index }})</mark></h4>
                   </button>
                 </h2>
                 <div id="panelOpen-week-{{ week.id }}" class="accordion-collapse collapse">
@@ -25,7 +25,7 @@
                     <table class="table table-bordered table-hover table-striped">
                       {% for day in week.days %}
                         <tr>
-                          <th>День {{ loop.index }}</th><th>{{ day.title }}</th>
+                          <th>День {{ loop.index }}</th><th>{{ day.title }}</th>
                         </tr>
                         {% if day.description %}
                           <tr><td colspan="2">{{ day.description }}</td></tr>
