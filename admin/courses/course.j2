@@ -18,23 +18,26 @@
       {{ bs_text(form.meta_title) }}
       {{ bs_text(form.meta_description) }}
     </fieldset>
-    {{ bs_btn(form.submit, value=btn_text) }}
+    {{ bs_btn(form.submit_btn, value=btn_text) }}
   </form>
   {% if weeks %}
     <hr class="my-4">
+    <p class="text-end mb-0">
+      <button class="btn btn-primary" id="update_orders">{{ _('Update orders') }}</button>
+    </p>
     {% for week in weeks %}
       <div class="d-flex gap-3 align-items-end">
         <div>
           <h3><code>[неделя {{ loop.index }}]</code> {{ week.title }}</h3>
           <p class="mb-0">{{ week.description }}</p>
         </div>
-        <p>{{ week.number }}</p>
-        <p class="ms-auto"><input class="form-control" type="number" value="{{ week.order }}"></p>
+        {# <p>{{ week.number }}</p> #}
+        <p class="ms-auto"><input class="form-control" data-week-id="{{ week.id }}" type="number" value="{{ week.order }}"></p>
       </div>
       {% for day in week.days %}
         <div class="d-flex gap-1 ps-3">
           <h5><code>[день {{ loop.index }}]</code> {{ day.title }}</h5>
-          <span class="ms-auto"><input class="form-control form-control-sm" type="number" value="{{ day.order }}"></span>
+          <span class="ms-auto"><input class="form-control form-control-sm" data-day-id="{{ day.id }}" type="number" value="{{ day.order }}"></span>
         </div>
       {% endfor %}
       <p class="ps-3"><a href="{{ url_for('admin_courses.add_day', course_id=course_id, week_id=week.id) }}">{{ _('Add day to this course to this week') }}</a></p>
@@ -50,3 +53,41 @@
     {% endif %}
   </nav>
 {% endblock admin_content %}
+
+{% block js %}
+<script>
+  const URL_TO_SEND = '{{ url_for('admin_courses.reorder') }}';
+  const dayElements = document.querySelectorAll('[data-day-id]');
+  const weekElements = document.querySelectorAll('[data-week-id]');
+  const updateOrdersBtn = document.querySelector('#update_orders');
+
+  const makeSortingOrders = () => {
+    return {
+      days: [...dayElements].map((el) => ({id: +el.dataset.dayId, order: +el.value})),
+      weeks: [...weekElements].map((el) => ({id: +el.dataset.weekId, order: +el.value})),
+    }
+  }
+
+  const sendToServer = async () => {
+    return await fetch(URL_TO_SEND, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'patch',
+      body: JSON.stringify(makeSortingOrders())
+    });
+  };
+
+  updateOrdersBtn.addEventListener('click', () => {
+    sendToServer().then((resp) => resp.json()).then((data) => {
+      console.info(data);
+      if (data.success) {
+        // OK!
+      }
+    }).catch(() => {
+      // Error
+    });
+  });
+</script>
+{% endblock js %}

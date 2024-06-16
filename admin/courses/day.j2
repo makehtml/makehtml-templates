@@ -18,10 +18,26 @@
       {{ bs_text(form.meta_title) }}
       {{ bs_text(form.meta_description) }}
     </fieldset>
-    {{ bs_btn(form.submit, value=btn_text) }}
+    {{ bs_btn(form.submit_btn, value=btn_text) }}
+    <button class="btn btn-success" type="button">{{ _('Save and add more') }}</button>
   </form>
   <hr class="my-4">
   <nav class="nav">
     <a class="nav-link" href="{{ url_for('admin_courses.index') }}">{{ _('Cancel') }}</a>
   </nav>
 {% endblock admin_content %}
+
+{% block js %}
+  <script>
+    const formElement = document.querySelector('form');
+    const successBtn = formElement.querySelector('.btn-success');
+    successBtn.addEventListener('click', () => {
+      const inputElement = document.createElement('input');
+      inputElement.type = 'hidden';
+      inputElement.name = 'next_order';
+      inputElement.value = +formElement.order.value + 1;
+      formElement.append(inputElement);
+      formElement.submit();
+    });
+  </script>
+{% endblock js %}

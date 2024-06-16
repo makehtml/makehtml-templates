@@ -51,9 +51,9 @@
 
         {% if current_user.is_authenticated %}
           <div class="col-lg-5 col-12 subscribe-form-wrap d-flex justify-content-center align-items-center">
-            <form class="custom-form subscribe-form" action="#" method="post" role="form">
+            <form class="custom-form subscribe-form" action="{{ url_for('courses.enroll') }}" method="post">
               <h4 class="mb-4 pb-2">{{ _('Enroll in a course') }}</h4>
-              <p>Interested and want to try it? Click on "sign up".</p>
+              <p>{{ _('Interested and want to try it? Click on "sign up".') }}</p>
               <input type="hidden" name="course-id" id="course_id" value="{{ course.id }}">
               <div class="col-12">
                 <button class="form-control" type="submit">{{ _('Sign up') }}</button>
@@ -62,9 +62,12 @@
           </div>
         {% else %}
           <div class="col-lg-5 col-12 d-flex justify-content-center align-items-center">
-            <form class="custom-form subscribe-form" action="#" method="post" role="form">
+            <form class="custom-form subscribe-form" action="{{ url_for('courses.enroll') }}" method="post">
               <h4 class="mb-4 pb-2">{{ _('Enroll in a course') }}</h4>
-              <p>Give me your email or telegram and I'll send you the details. Or <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ url_for_security('login') }}">log in</a> to your personal account and you can try it right away.</p>
+              <p>
+                {{ _('Give me your email or telegram and I\'ll send you the details. Or %(open)slog in%(close)s to your personal account and you can try it right away.',
+                open='<a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="%s">' % url_for_security('login'), close='</a>') }}
+              </p>
               <input type="hidden" name="course-id" id="course_id" value="{{ course.id }}">
               <input class="form-control" type="email" name="contact-email" id="contact_email" placeholder="{{ _('Email Address') }}">
               <input class="form-control" type="text" name="contact-telegram" id="contact_telegram" placeholder="{{ _('Telegram') }}">
