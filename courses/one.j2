@@ -21,17 +21,21 @@
                 </h2>
                 <div id="panelOpen-week-{{ week.id }}" class="accordion-collapse collapse">
                   <div class="accordion-body">
-                    <p>{{ week.description }}</p>
-                    <table class="table table-bordered table-hover table-striped">
-                      {% for day in week.days %}
-                        <tr>
-                          <th>День {{ loop.index }}</th><th>{{ day.title }}</th>
-                        </tr>
-                        {% if day.description %}
-                          <tr><td colspan="2">{{ day.description }}</td></tr>
-                        {% endif %}
-                      {% endfor %}
-                    </table>
+                    <p class="display-6">{{ week.description }}</p>
+                    {% if current_user.is_authenticated %}
+                      <table class="table table-bordered table-hover table-striped">
+                        {% for day in week.days %}
+                          <tr>
+                            <th>День {{ loop.index }}</th><th>{{ day.title }}</th>
+                          </tr>
+                          {% if day.description %}
+                            <tr><td colspan="2">{{ day.description }}</td></tr>
+                          {% endif %}
+                        {% endfor %}
+                      </table>
+                    {% else %}
+                      <p><em>Интересно, что вас ждет на курсе более подробно? Маленький спойлер: всё разбито по дням и по полочкам! <a href="{{ url_for('security.login') }}">Авторизуйтесь</a>, и полная программа по дням откроется прямо перед вами 😉</em></p>
+                    {% endif %}
                   </div>
                 </div>
               </div>
@@ -42,23 +46,27 @@
     </div>
   </section>
 
-  <section class="section-padding section-bg">
+  <section id="enroll" class="section-padding section-bg">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-5 col-12">
-          <img class="newsletter-image img-fluid" src="{{ url_for('static', filename='images/rear-view-young-college-student.jpg') }}" alt="">
+          <img class="newsletter-image img-fluid" src="{{ url_for('static', filename='images/anton01.jpg') }}" alt="Готов попробовать?">
         </div>
 
         {% if current_user.is_authenticated %}
           <div class="col-lg-5 col-12 subscribe-form-wrap d-flex justify-content-center align-items-center">
-            <form class="custom-form subscribe-form" action="{{ url_for('courses.enroll') }}" method="post">
-              <h4 class="mb-4 pb-2">{{ _('Enroll in a course') }}</h4>
-              <p>{{ _('Interested and want to try it? Click on "sign up".') }}</p>
-              <input type="hidden" name="course-id" id="course_id" value="{{ course.id }}">
-              <div class="col-12">
-                <button class="form-control" type="submit">{{ _('Sign up') }}</button>
-              </div>
-            </form>
+            {% if already_enrolled %}
+              <p>Вы уже зачислены на курс, проверьте подробности в <a class="link-offset-1 link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ url_for("user_courses.index") }}">личном кабинете</a>.</p>
+            {% else %}
+              <form class="custom-form subscribe-form" action="{{ url_for('user_courses.enroll') }}" method="post">
+                <h4 class="mb-4 pb-2">{{ _('Enroll in a course') }}</h4>
+                <p>Интересно и хочется попробовать? Просто нажмите кнопку, и вы в деле!</p>
+                <input type="hidden" name="course-id" id="course_id" value="{{ course.id }}">
+                <div class="col-12">
+                  <button class="form-control" type="submit">Попробовать</button>
+                </div>
+              </form>
+            {% endif %}
           </div>
         {% else %}
           <div class="col-lg-5 col-12 d-flex justify-content-center align-items-center">
@@ -66,14 +74,14 @@
               <h4 class="mb-4 pb-2">{{ _('Enroll in a course') }}</h4>
               <p>
                 {{ _('Give me your email or telegram and I\'ll send you the details. Or %(open)slog in%(close)s to your personal account and you can try it right away.',
-                open='<a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="%s">' % url_for_security('login'), close='</a>') }}
+                open='<a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="%s">' % url_for_security('login'), close='</a>') }}
               </p>
               <input type="hidden" name="course-id" id="course_id" value="{{ course.id }}">
               <input class="form-control" type="email" name="contact-email" id="contact_email" placeholder="{{ _('Email Address') }}">
               <input class="form-control" type="text" name="contact-telegram" id="contact_telegram" placeholder="{{ _('Telegram') }}">
 
               <div class="col-12">
-                <button class="form-control" type="submit">{{ _('Sign up') }}</button>
+                <button class="form-control" type="submit">Попробовать</button>
               </div>
             </form>
           </div>

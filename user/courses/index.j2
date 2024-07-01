@@ -1,0 +1,12 @@
+{% extends "user/base.j2" %}
+
+{% block user_content %}
+  <h1>Список активных курсов</h1>
+  {% if current_user.courses %}
+    {% for course in current_user.courses %}
+      <p>Курс «<a class="link-offset-1 link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ url_for('user_courses.one', alias=course.alias) }}">{{ course.title }}</a>» <small>(поток {{ course.batch }})</small>.</p>
+    {% endfor %}
+  {% else %}
+    <p>Пока у вас нет активных курсов.</p>
+  {% endif %}
+{% endblock user_content %}

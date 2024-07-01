@@ -1,7 +1,7 @@
-{% extends "admin/base.j2" %}
+{% extends "user/base.j2" %}
 {% from 'macros/form.j2' import bs_btn, bs_text, render_field_errors %}
 
-{% block admin_content %}
+{% block user_content %}
   <h1>{{ _('Edit profile') }}</h1>
   <form action="{{ url_for('user.edit') }}" method="post">
     {{ form.hidden_tag() }}
@@ -13,4 +13,4 @@
     {{ bs_btn(form.submit) }}
     <a class="ms-3" href="{{ url_for_security('change_password') }}">{{ _('Change password') }}</a>
   </form>
-{% endblock admin_content %}
+{% endblock user_content %}

@@ -1,0 +1,27 @@
+{% extends "user/base.j2" %}
+
+{% block user_content %}
+  <h1>Курс «{{ course.title }}»</h1>
+  <p><em>Старт: {{ course.dt_start }}</em></p>
+  <p>{{ course.description }}</p>
+  {% for week in course.weeks %}
+    <h2>Неделя {{ loop.index }}</h2>
+    <p>{{ week.description }}</p>
+    <div class="row">
+      {% for day in week.days %}
+        <div class="col-lg-4 col-md-6 col-12 mb-4">
+          <a class="custom-block shadow-lg w-100 {% if day.is_arrived %}bg-dark-subtle{% else %}bg-white{% endif %}" href="{{ url_for('user_courses.day', alias=course.alias, week=week.id, day=day.id) }}">
+            {% if day.complete %}<span class="section-overlay"></span>{% endif %}
+            <div class="d-flex gap-1 position-relative">
+              <div>
+                <h5 class="mb-2{% if day.complete %} text-white{% endif %}">{{ day.title }}</h5>
+                <p class="mb-0{% if day.complete %} text-white{% endif %}">{{ day.description }}</p>
+              </div>
+              <span class="badge bg-design rounded-pill ms-auto">{{ day.number or day.order }}</span>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+{% endblock user_content %}
