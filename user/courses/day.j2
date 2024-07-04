@@ -44,7 +44,7 @@
   {% endif %}
   <form method="post" action="{{ url_for('user_courses.day_complete', alias=course_alias, week_id=day.week.id, day_id=day.id) }}">
     {% if not day.is_complete %}
-      <button class="btn btn-success" type="submit">{{ _('Task completed') }}</button>
+      <button class="btn btn-success me-2" type="submit">{{ _('Task completed') }}</button>
     {% endif %}
     <a class="btn btn-secondary" href="{{ url_for('user_courses.one', alias=course_alias) }}">{{ _('Back to course') }}</a>
   </form>
