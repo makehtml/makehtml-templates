@@ -13,6 +13,7 @@
     {{ bs_text(form.batch) }}
     {{ bs_text(form.order) }}
     {{ bs_checkbox(form.disabled) }}
+    {{ bs_text(form.dt_start) }}
     <fieldset>
       <legend>{{ _('SEO') }}</legend>
       {{ bs_text(form.meta_title) }}
@@ -28,7 +29,7 @@
     {% for week in weeks %}
       <div class="d-flex gap-3 align-items-end">
         <div>
-          <h3><code>[неделя {{ loop.index }}]</code> {{ week.title }}</h3>
+          <h3><code>[неделя {{ loop.index }}]</code> {{ week.title }} <a href="{{ url_for('admin_courses.edit_week', week_id=week.id) }}">{{ _('Edit') }}</a></h3>
           <p class="mb-0">{{ week.description }}</p>
         </div>
         {# <p>{{ week.number }}</p> #}
@@ -36,7 +37,7 @@
       </div>
       {% for day in week.days %}
         <div class="d-flex gap-1 ps-3">
-          <h5><code>[день {{ loop.index }}]</code> {{ day.title }}</h5>
+          <h5><code>[день {{ loop.index }}]</code> {{ day.title }} <a href="{{ url_for('admin_courses.edit_day', course_id=course_id, day_id=day.id) }}">{{ _('Edit') }}</a></h5>
           <span class="ms-auto"><input class="form-control form-control-sm" data-day-id="{{ day.id }}" type="number" value="{{ day.order }}"></span>
         </div>
       {% endfor %}
