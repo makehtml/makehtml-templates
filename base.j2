@@ -110,7 +110,11 @@
                           <a href="{{ url_for('core.index') }}">{{ _('Home') }}</a>
                         </li>
                         {% for link in g.breadcrumbs %}
-                          {% if link.alias %}
+                          {% if link.params %}
+                            <li class="breadcrumb-item">
+                              <a href="{{ url_for(link.controller, **link.params) }}">{{ link.title }}</a>
+                            </li>
+                          {% elif link.alias %}
                             <li class="breadcrumb-item">
                               <a href="{{ url_for('catalog.category', category_alias=link.alias) }}">{{ link.title }}</a>
                             </li>
