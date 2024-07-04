@@ -1,0 +1,52 @@
+{% extends "user/base.j2" %}
+
+{% block user_content %}
+  {% if timedelta %}
+    <p>Это задание откроется через {{ timedelta | humanize_td }}.</p>
+    <a class="btn btn-secondary" href="{{ url_for('user_courses.one', alias=course_alias) }}">{{ _('Back to course') }}</a>
+  {% else %}
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@justinribeiro/lite-youtube@1.5.0/lite-youtube.js"></script>
+  <style>
+    .lite-youtube-fallback {
+      aspect-ratio: 16 / 9; /* matches YouTube player */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 1em;
+      padding: 1em;
+      background-color: #000;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    /* right-facing triangle "Play" icon */
+    .lite-youtube-fallback::before {
+      display: block;
+      content: '';
+      border: solid transparent;
+      border-width: 2em 0 2em 3em;
+      border-left-color: red;
+    }
+
+    .lite-youtube-fallback:hover::before {
+      border-left-color: #fff;
+    }
+
+    .lite-youtube-fallback:focus {
+      outline: 2px solid red;
+    }
+  </style>
+  <h1>{{ day.title }}</h1>
+  <p>{{ day.description }}</p>
+  {% if day.youtube_id %}
+    <lite-youtube class="my-4" videotitle="This is a video title" params="rel=0" videoid="{{ day.youtube_id }}"></lite-youtube>
+  {% endif %}
+  <form method="post" action="{{ url_for('user_courses.day_complete', alias=course_alias, week_id=day.week.id, day_id=day.id) }}">
+    {% if not day.is_complete %}
+      <button class="btn btn-success" type="submit">{{ _('Task completed') }}</button>
+    {% endif %}
+    <a class="btn btn-secondary" href="{{ url_for('user_courses.one', alias=course_alias) }}">{{ _('Back to course') }}</a>
+  </form>
+  {% endif %}
+{% endblock user_content %}
