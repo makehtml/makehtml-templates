@@ -45,6 +45,13 @@
     {% endfor %}
     <p><a href="{{ url_for('admin_courses.add_week', course_id=course_id) }}">{{ _('Add week to this course') }}</a></p>
   {% endif %}
+  {% if tariffs %}
+    <hr class="my-4">
+    <h3>{{ _('Tariffs') }}</h3>
+    {% for tariff in tariffs %}
+      <p>{{ tariff.title }} — {{ tariff.price }} ₽</p>
+    {% endfor %}
+  {% endif %}
   <hr class="my-4">
   <nav class="nav">
     <a class="nav-link" href="{{ url_for('admin_courses.index') }}">{{ _('Back') }}</a>
@@ -52,6 +59,7 @@
       <a class="nav-link" href="{{ url_for('admin_courses.add_week') }}">{{ _('Add week') }}</a>
       <a class="nav-link" href="{{ url_for('admin_courses.add_day', course_id=course_id) }}">{{ _('Add day to this course') }}</a>
     {% endif %}
+    <a class="nav-link" href="{{ url_for('admin_courses.add_tariff', course_id=course_id) }}">{{ _('Add tariff to this course') }}</a>
   </nav>
 {% endblock admin_content %}
 

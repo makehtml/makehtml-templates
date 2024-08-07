@@ -1,0 +1,331 @@
+{% extends "base.j2" %}
+
+{% block content %}
+  <section class="topics-detail-section section-padding" id="detail">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-12 m-auto">
+          <h1 class="mb-4">{{ title }}</h1>
+          {% if course.batch %}
+            <p class="lead">Поток {{ course.batch }}</p>
+          {% endif %}
+
+          {{ course.text }}
+
+          {% if course.weeks%}
+            <h2 class="mb-3">Программа вашего обучения</h2>
+            <div class="accordion mb-5" id="accordionPanelWeeks">
+              {% for week in course.weeks %}
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelOpen-week-{{ week.id }}" aria-expanded="false" aria-controls="panelOpen-week-{{ week.id }}">
+                      <h4>{{ week.title }} <mark>(неделя {{ loop.index }})</mark></h4>
+                    </button>
+                  </h2>
+                  <div id="panelOpen-week-{{ week.id }}" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                      <p class="display-6">{{ week.description }}</p>
+                      {% if current_user.is_authenticated %}
+                        <table class="table table-bordered table-hover table-striped">
+                          {% for day in week.days %}
+                            <tr>
+                              <th>День {{ loop.index }}</th><th>{{ day.title }}</th>
+                            </tr>
+                            {% if day.description %}
+                              <tr><td colspan="2">{{ day.description }}</td></tr>
+                            {% endif %}
+                          {% endfor %}
+                        </table>
+                      {% else %}
+                        <p><em>Интересно, что вас ждет на курсе более подробно? Маленький спойлер: всё разбито по дням и по полочкам! <a href="{{ url_for('security.login') }}">Авторизуйтесь</a>, и полная программа по дням откроется прямо перед вами 😉</em></p>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p>Курс и программа ещё готовится. Просим прощения за временные неудобства.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="enroll" class="section-padding section-bg">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-5 col-12">
+          <img class="newsletter-image img-fluid" src="{{ url_for('static', filename='images/anton01.jpg') }}" alt="Готов попробовать?">
+        </div>
+
+        {% if current_user.is_authenticated %}
+          <div class="col-lg-5 col-12 subscribe-form-wrap d-flex justify-content-center align-items-center">
+            {% if already_enrolled %}
+              <p>Вы уже зачислены на курс, проверьте подробности в <a class="link-offset-1 link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ url_for("user_courses.index") }}">личном кабинете</a>.</p>
+            {% else %}
+              <form class="custom-form subscribe-form" action="{{ url_for('user_courses.enroll') }}" method="post">
+                <h4 class="mb-4 pb-2">{{ _('Enroll in a course') }}</h4>
+                <p>Интересно и хочется попробовать? Просто нажмите кнопку, и вы в деле!</p>
+                <input type="hidden" name="course-id" id="course_id" value="{{ course.id }}">
+                <div class="col-12">
+                  <button class="form-control" type="submit">Попробовать</button>
+                </div>
+              </form>
+            {% endif %}
+          </div>
+        {% else %}
+          <div class="col-lg-5 col-12 d-flex justify-content-center align-items-center">
+            <form class="custom-form subscribe-form" action="{{ url_for('courses.enroll') }}" method="post">
+              <h4 class="mb-4 pb-2">{{ _('Enroll in a course') }}</h4>
+              <p>
+                {{ _('Give me your email or telegram and I\'ll send you the details. Or %(open)slog in%(close)s to your personal account and you can try it right away.',
+                open='<a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="%s">' % url_for_security('login'), close='</a>') }}
+              </p>
+              <input type="hidden" name="course-id" id="course_id" value="{{ course.id }}">
+              <input class="form-control" type="email" name="contact-email" id="contact_email" placeholder="{{ _('Email Address') }}">
+              <input class="form-control" type="text" name="contact-telegram" id="contact_telegram" placeholder="{{ _('Telegram') }}">
+
+              <div class="col-12">
+                <button class="form-control" type="submit">Попробовать</button>
+              </div>
+            </form>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .price-sec {
+      padding-top: 120px;
+      padding-bottom: 60px;
+      background-color: #eee;
+    }
+    .mycard {
+      text-align: center;
+      position: relative;
+      border-radius: 15px;
+      padding: 40px 20px;
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+      transition: .5s;
+      overflow: hidden;
+    }
+
+    .mycard:hover {
+      transform: scale(1.1);
+    }
+
+    .basic,
+    .basic .title .fa { background: linear-gradient(-45deg, #f403d1, #64b5f6); }
+
+    .standard,
+    .standard .title .fa { background: linear-gradient(-45deg, #ffec61, #f321d7); }
+
+    .premium,
+    .premium .title .fa { background: linear-gradient(-45deg, #24ff72, #9a4eff); }
+
+    .mycard::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40%;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 1;
+      transform: skewY(-5deg) scale(1.5);
+    }
+
+    .title .fa {
+      color: #fff;
+      font-size: 60px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 100px;
+      box-shadow: 0 10px 10px rgba(0, 0, 0, 0.20);
+    }
+
+    .title h2 {
+      position: relative;
+      margin: 20px 0 0;
+      color: #fff;
+      font-size: 28px;
+      z-index: 2;
+    }
+
+    .price {
+      position: relative;
+      z-index: 2;
+    }
+
+    .price h4 {
+      margin: 0;
+      padding: 20px 0;
+      color: #fff;
+      font-size: 60px;
+    }
+    .price h4 sub {
+      font-size: 42px;
+    }
+
+    .option {
+      position: relative;
+      z-index: 2;
+    }
+
+    .option ul { padding-left: 0; }
+    .option ul li {
+      margin: 0 0 10px;
+      padding: 0;
+      list-style: none;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    .mycard a {
+      position: relative;
+      z-index: 2;
+      border-radius: 8px;
+      margin: 30px auto 8px;
+      text-decoration: none;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.20);
+      font-weight: bold;
+    }
+  </style>
+
+  <section id="prices" class="price-sec">
+    <div class="container-fluid">
+      <div class="container">
+
+        <div class="switcher">
+          <label for="price_sw">По месяцу</label>
+          <label class="switcher__container">
+            <input id="price_sw" type="checkbox">
+            <div class="switcher-body"></div>
+            <div class="switcher-dot"></div>
+          </label>
+          <label for="price_sw">Весь курс</label>
+        </div>
+        <style>
+          .switcher {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 3rem;
+          }
+          .switcher > label { cursor: pointer; }
+          .switcher__container { position: relative; }
+          .switcher input {
+            position: absolute;
+            clip: rect(0 0 0 0);
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+          }
+          .switcher input:checked ~ .switcher-dot {
+            transform: translateX(40px);
+          }
+          .switcher input:checked ~ .switcher-body {
+            background-color: #545454;
+          }
+          .switcher-body {
+            width: 72px;
+            height: 32px;
+            border-radius: 16px;
+            background-color: #d7d7d7;
+            transition: background 200ms;
+          }
+          .switcher-dot {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transform: translateX(0px);
+            transition: transform 200ms;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            box-shadow: 0 3px 1px rgba(0,0,0,0.06), 0 3px 8px rgba(0,0,0,0.15);
+            border: 1px solid rgba(0,0,0,0.04);
+            background-color: #fff;
+          }
+        </style>
+
+        {% set tariffs = [{
+          'alias': 'basic',
+          'title': 'Начинающие котики',
+          'options_plus': [
+            '2 часа личных консультаций',
+            '8 часов групповых консультаций',
+            'Возможность стажировки с первого месяца'
+          ],
+          'options_minus': [
+            'Нет такого пункта'
+          ],
+          'price': 9500,
+          'icon': 'paper-plane'
+        }, {
+          'alias': 'standard',
+          'title': 'Маги разработки',
+          'options_plus': [
+            '4 часа личных консультаций',
+            '8 часов групповых консультаций',
+            'Возможность стажировки с первого месяца'
+          ],
+          'price': 12000,
+          'icon': 'plane'
+        }, {
+          'alias': 'premium',
+          'title': 'Начинающие котики',
+          'options_plus': [
+            '16 часов личных консультаций',
+            '8 часов групповых консультаций',
+            'Возможность стажировки с первого месяца'
+          ],
+          'price': 45000,
+          'icon': 'rocket'
+        }] %}
+
+        <div class="row">
+          {% for t in tariffs %}
+            <div class="col-lg-4 mb-5 price-table">
+              <div class="mycard {{ t.alias }}">
+                <div class="title">
+                  <i class="fa fa-{{ t.icon }}" aria-hidden="true"></i>
+                  <h2>{{ t.title }}</h2>
+                </div>
+                <div class="price">
+                  <h4><span>{{ t.price }}</span><sub>₽</sub></h4>
+                </div>
+                <div class="option">
+                  <ul>
+                    {% for option in t.options_plus %}
+                      <li><i class="fa fa-check" aria-hidden="true"></i> {{ option }}</li>
+                    {% endfor %}
+                    {% for option in t.options_minus %}
+                      <li><i class="fa fa-times" aria-hidden="true"></i> {{ option }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                <a class="btn btn-light btn-block" href="#">Записаться</a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock content %}
+
+{% block js %}
+  <script>
+    const priceElements = document.querySelectorAll('.price h4 span');
+    const prices = Array.from(priceElements).map((el) => parseInt(el.textContent));
+    document.querySelector('#price_sw').addEventListener('change', (evt) => {
+      priceElements.forEach((el, idx) => { el.textContent = (evt.currentTarget.checked) ? prices[idx] * .9 : prices[idx] });
+    });
+  </script>
+{% endblock js %}

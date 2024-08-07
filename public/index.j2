@@ -28,11 +28,11 @@
         </div>
         <div class="col-lg-6 col-12 mb-4 mb-lg-0">
           <div class="custom-block bg-white shadow-lg">
-            <a href="{{ url_for('page.one', pagename='details') }}">
+            <a href="{{ url_for('courses.one', alias=course1.alias) }}">
               <div class="d-flex">
                 <div>
-                  <h5 class="mb-2">FullStack+ для начинающих</h5>
-                  <p class="mb-0">Веб-разработчик разрабатывает сайт на языках HTML, CSS и JavaScript. Настраивает Git, чтобы работать в команде. Веб-разработчик разбирается и в устройстве сервера: может настроить Nginx и запрограммировать сервер на Python.</p>
+                  <h5 class="mb-2">{{ course1.title }}</h5>
+                  <p class="mb-0">{{ course1.description }}</p>
                 </div>
 
                 <span class="badge bg-design rounded-pill ms-auto">14</span>
@@ -50,9 +50,9 @@
 
               <div class="custom-block-overlay-text d-flex">
                 <div>
-                  <h5 class="text-white mb-2">Backend для верстальщиков</h5>
-                  <p class="text-white">Разработка бэкенда требует знаний в области серверов, баз данных, программирования на высоком уровне и безопасности веб-приложений.</p>
-                  <a class="btn custom-btn mt-2 mt-lg-3" href="topics-detail.html">Подробнее</a>
+                  <h5 class="text-white mb-2">{{ course2.title }}</h5>
+                  <p class="text-white">{{ course2.description }}</p>
+                  <a class="btn custom-btn mt-2 mt-lg-3" href="{{ url_for('courses.one', alias=course2.alias) }}">Подробнее</a>
                 </div>
 
                 <span class="badge bg-finance rounded-pill ms-auto">25</span>
