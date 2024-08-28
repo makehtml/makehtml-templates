@@ -1,0 +1,19 @@
+{% extends "admin/base.j2" %}
+{% from 'macros/form.j2' import bs_btn, bs_text, render_field_errors %}
+
+{% block admin_content %}
+  <h1>{{ title }}</h1>
+  <form action="{{ action }}" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    {{ render_field_errors(form.csrf_token) }}
+    {{ bs_text(form.courses) }}
+    {{ bs_text(form.title) }}
+    {{ bs_text(form.text, rows=5, floating_label=False) }}
+    {{ bs_text(form.price) }}
+    {{ bs_btn(form.submit_btn, value=btn_text) }}
+  </form>
+  <hr class="my-4">
+  <nav class="nav">
+    <a class="nav-link" href="{{ url_for('admin_courses.edit', course_id=course_id) }}">{{ _('Cancel') }}</a>
+  </nav>
+{% endblock admin_content %}
