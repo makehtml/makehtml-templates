@@ -39,6 +39,7 @@
   </style>
   <h1>{{ day.title }}</h1>
   <p>{{ day.description }}</p>
+  {{ day.text }}
   {% if day.youtube_id %}
     <lite-youtube class="my-4" videotitle="This is a video title" params="rel=0" videoid="{{ day.youtube_id }}"></lite-youtube>
   {% endif %}
