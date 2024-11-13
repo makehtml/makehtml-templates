@@ -17,20 +17,8 @@
               <div>
                 <h5 class="mb-2{% if day_complete %} text-white{% endif %}">{{ day.title }}</h5>
                 <p class="mb-0{% if day_complete %} text-white{% endif %}">{{ day.description }}</p>
-                {% if current_user.has_role('admin') %}
-                  <p class="mt-2{% if day_complete %} text-white{% endif %}">
-                    <small>
-                      ord: {{ day.order }}<br>
-                      num: {{ day.number }}<br>
-                      has_arrived: {{ day.has_arrived }}<br>
-                      is_complete: {{ day.is_complete }}<br>
-                      scheduled_date: {{ day.scheduled_date }}<br>
-                      timedelta: {{ day.timedelta }}<br>
-                    </small>
-                  </p>
-                {% endif %}
               </div>
-              <span class="badge bg-design rounded-pill ms-auto">{{ day.number or day.order }}</span>
+              <span class="badge bg-design rounded-pill ms-auto"{% if current_user.has_role('admin') %} data-bs-toggle="tooltip" data-bs-title="{{ day.scheduled_date| format_dt(fmt='short') }}, {{ day.timedelta | humanize_td }}"{% endif %}>{{ day.number or day.order }}</span>
             </div>
           </a>
         </div>
@@ -38,3 +26,10 @@
     </div>
   {% endfor %}
 {% endblock user_content %}
+
+{% block js %}
+  <script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+  </script>
+{% endblock js %}
