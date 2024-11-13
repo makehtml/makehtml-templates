@@ -5,8 +5,8 @@
   <p><em>Старт: {{ course.dt_start | format_dt(no_time=True) }} <small>({{ course.dt_start | humanize_dt }})</small></em></p>
   <p>{{ course.description }}</p>
   {% for week in course.weeks %}
-    <h2>Неделя {{ loop.index }}</h2>
-    <p>{{ week.description }}</p>
+    <h2>Неделя {{ loop.index }}: <small>{{ week.title }}</small></h2>
+    <h6>{{ week.description }}</h6>
     <div class="row mb-4">
       {% for day in week.days %}
         {% set day_complete = day in current_user.days_complete %}
