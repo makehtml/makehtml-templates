@@ -5,24 +5,24 @@
   <table class="table table-striped table-hover">
     <tr>
       <th>ID</th>
-      <th>{{ _('Email') }}</th>
-      <th>{{ _('Username') }}</th>
+      <th>{{ _('User') }}</th>
       <th>{{ _('Roles') }}</th>
-      <th>{{ _('Confirmed at') }}</th>
+      <th>{{ _('Date') }}</th>
       <th>{{ _('Was invited by') }}</th>
       <th>{{ _('Invitations left') }}</th>
     </tr>
     {% for user in users %}
       <tr>
         <td>{{ user.id }}</td>
-        <td>{{ user.email }}</td>
         <td>
+          email: {{ user.email }}
           {% if user.confirmed_at %}
             {% set icon_name = 'user-active' %}
           {% else %}
             {% set icon_name = 'user' %}
           {% endif %}
-          {{ icon(icon_name, width=20, height=20) }} {{ user.username }}
+          username: {{ icon(icon_name, width=20, height=20) }} {{ user.username }}<br>
+          name: {{ user.firstname }} {{ user.lastname }}
         </td>
         <td>
           <a href="{{ url_for('admin.user_roles', user_id=user.id) }}">{{ _('change') }}</a>
@@ -33,6 +33,8 @@
           ]
         </td>
         <td>
+          registered: {{ user.create_datetime }}<br>
+          confirmed:
           {% if user.confirmed_at %}
             {{ user.confirmed_at | datetimeformat }}
           {% else %}
@@ -42,7 +44,7 @@
         <td>
           {{ user.invited_by }}
         </td>
-        <td><b>{{ user.invitations | count }}</b>: {% for i in user.invitations %}{{ i.code }}{% if not loop.last %}, {% endif %}{% endfor %}</td>
+        <td><b>{{ user.invitations | count }}</b>: <small>{% for i in user.invitations %}{{ i.code }}{% if not loop.last %}, {% endif %}{% endfor %}</small></td>
       </tr>
     {% endfor %}
   </table>
