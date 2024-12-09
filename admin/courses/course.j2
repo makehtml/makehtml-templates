@@ -53,6 +53,26 @@
     {% endfor %}
   {% endif %}
   <hr class="my-4">
+  {% if users %}
+    <h3>Пользователи на этом курсе:</h3>
+    {% for user in users %}
+      <div style="display: flex; align-items: baseline; gap: 1rem">
+        <p style="margin-right: auto;">
+          <a class="link-offset-1 link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="#">{{ user.username }}</a>
+        </p>
+
+        <div class="progress-bar2"><div style="transform: scaleX({{ user.progress }})"><!-- course progress --></div></div>
+        {# TODO: refactor native progress to css
+        <div class="progress-bar2">
+          <label for="progress-bar-1">course progress</label>
+          <progress id="progress-bar-1" value="70" max="100">70 %</progress>
+          <output id="progress-output-1">70%</output>
+        </div>
+          #}
+      </div>
+    {% endfor %}
+  {% endif %}
+  <hr class="my-4">
   <nav class="nav">
     <a class="nav-link" href="{{ url_for('admin_courses.index') }}">{{ _('Back') }}</a>
     {% if course_id %}
