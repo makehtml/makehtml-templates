@@ -54,11 +54,11 @@
   {% endif %}
   <hr class="my-4">
   {% if users %}
-    <h3>Пользователи на этом курсе:</h3>
+    <h3>Пользователи на этом курсе и их прогресс:</h3>
     {% for user in users %}
-      <div style="display: flex; align-items: baseline; gap: 1rem">
+      <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 1rem">
         <p style="margin-right: auto;">
-          <a class="link-offset-1 link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="#">{{ user.username }}</a>
+          <a class="link-offset-1 link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ url_for('admin.user_info', user_id=user.id) }}">{{ user.username }} <small>({{ user.email }})</small></a>
         </p>
 
         <div class="progress-bar2"><div style="transform: scaleX({{ user.progress }})"><!-- course progress --></div></div>
@@ -68,7 +68,12 @@
           <progress id="progress-bar-1" value="70" max="100">70 %</progress>
           <output id="progress-output-1">70%</output>
         </div>
-          #}
+        #}
+        <div style="width:100%">
+          {% for day in user.days_complete %}
+            День (id: {{ day.id }}) <small>{{ day.title }}</small><br>
+          {% endfor %}
+        </div>
       </div>
     {% endfor %}
   {% endif %}

@@ -1,0 +1,16 @@
+{% extends "admin/base.j2" %}
+
+{% block admin_content %}
+  <h2>{{ _('User details for a user') }} {{ user.email }}</h2>
+  <ul>
+    {% for k, v in user.__dict__.items() %}
+      {% if k not in ['id', 'password', '_sa_instance_state', 'fs_webauthn_user_handle', 'fs_uniquifier'] %}
+        {% if k == 'roles' %}
+          <li>{{ k }}: [{% for role in v %}{{ role.name }}{% if not loop.last %}, {% endif %}{% endfor %}]</li>
+        {% else %}
+          <li>{{ k }}: {{ v }}</li>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endblock admin_content %}
