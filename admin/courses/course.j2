@@ -56,9 +56,10 @@
   {% if users %}
     <h3>Пользователи на этом курсе и их прогресс:</h3>
     {% for user in users %}
-      <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 1rem">
-        <p style="margin-right: auto;">
-          <a class="link-offset-1 link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ url_for('admin.user_info', user_id=user.id) }}">{{ user.username }} <small>({{ user.email }})</small></a>
+      <hr style="color: var(--theme-bg-alt);">
+      <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 1rem; margin-bottom: 1rem;">
+        <p class="mb-0" style="margin-right: auto;">
+          <a class="link-offset-1 link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ url_for('admin.user_info', user_id=user.id) }}">{{ user.username }} <small>({{ user.email }})</small> {{ user.firstname }} {{ user.lastname }}</a>
         </p>
 
         <div class="progress-bar2"><div style="transform: scaleX({{ user.progress }})"><!-- course progress --></div></div>
