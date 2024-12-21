@@ -71,8 +71,14 @@
         </div>
         #}
         <div style="width:100%">
-          {% for day in user.days_complete %}
-            День (id: {{ day.id }}) <small>{{ day.title }}</small><br>
+          {% for week in weeks %}
+            <h5>🧑‍💻 Неделя (id: {{ week.id }}) <small>{{ week.title }}</small></h5>
+            <p>
+              {% for day in week.days %}
+                {% if day in user.days_complete %}✅{% else %}❌{% endif %}
+                День (id: {{ day.id }}) <small>{{ day.title }}</small><br>
+              {% endfor %}
+            </p>
           {% endfor %}
         </div>
       </div>
@@ -87,6 +93,16 @@
     {% endif %}
     <a class="nav-link" href="{{ url_for('admin_courses.add_tariff', course_id=course_id) }}">{{ _('Add tariff to this course') }}</a>
   </nav>
+
+  {# TODO: refactor toast to base template #}
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">Обновлено успешно!</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"><span class="sr-only">Закрыть</span></button>
+      </div>
+    </div>
+  </div>
 {% endblock admin_content %}
 
 {% block js %}
@@ -95,6 +111,9 @@
   const dayElements = document.querySelectorAll('[data-day-id]');
   const weekElements = document.querySelectorAll('[data-week-id]');
   const updateOrdersBtn = document.querySelector('#update_orders');
+
+  const toastLiveExample = document.querySelector('#liveToast');
+  const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
 
   const makeSortingOrders = () => {
     return {
@@ -109,7 +128,7 @@
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      method: 'patch',
+      method: 'PATCH',
       body: JSON.stringify(makeSortingOrders())
     });
   };
@@ -118,10 +137,11 @@
     sendToServer().then((resp) => resp.json()).then((data) => {
       console.info(data);
       if (data.success) {
-        // OK!
+        console.info('OK!');
+        toastBootstrap.show();
       }
     }).catch(() => {
-      // Error
+      console.error('Error!');
     });
   });
 </script>
