@@ -58,14 +58,13 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-lg-5 me-lg-auto">
-              <li class="nav-item"><a class="nav-link" href="{{ url_for('core.index') }}">Главная</a></li>
-              <li class="nav-item"><a class="nav-link" href="{{ url_for('courses.index') }}">Курсы</a></li>
-              <li class="nav-item"><a class="nav-link" href="{{ url_for('core.index') }}">Контакты</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('core.index') }}">{{ _('Home') }}</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('courses.index') }}">{{ _('Courses') }}</a></li>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Страницы</a>
+                <a class="nav-link dropdown-toggle" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Страницы</a>
 
                 <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
-                  <li><a class="dropdown-item" href="{{ url_for('courses.index') }}">{{ _('Courses') }}</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('page.one', pagename='about') }}">{{ _('About') }}</a></li>
                   <li><a class="dropdown-item" href="{{ url_for('page.one', pagename='contacts') }}">{{ _('Contacts') }}</a></li>
                 </ul>
               </li>
@@ -164,16 +163,16 @@
 
             <ul class="site-footer-links">
               <li class="site-footer-link-item">
-                <a href="{{ url_for('core.index') }}" class="site-footer-link">Главная</a>
+                <a href="{{ url_for('core.index') }}" class="site-footer-link">{{ _('Home') }}</a>
               </li>
               <li class="site-footer-link-item">
-                <a href="{{ url_for('courses.index') }}" class="site-footer-link">Курсы</a>
+                <a href="{{ url_for('courses.index') }}" class="site-footer-link">{{ _('Courses') }}</a>
               </li>
               <li class="site-footer-link-item">
-                <a href="#" class="site-footer-link">FAQs</a>
+                <a href="#" class="site-footer-link">{{ _('FAQs') }}</a>
               </li>
               <li class="site-footer-link-item">
-                <a href="#" class="site-footer-link">Контакты</a>
+                <a href="{{ url_for('page.one', pagename='contacts') }}" class="site-footer-link">{{ _('Contacts') }}</a>
               </li>
             </ul>
           </div>
