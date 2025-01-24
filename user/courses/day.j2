@@ -1,11 +1,7 @@
 {% extends "user/base.j2" %}
 
-{% block user_content %}
-  {% if timedelta %}
-    <p>Это задание откроется через {{ timedelta | humanize_td }}.</p>
-    <a class="btn btn-secondary" href="{{ url_for('user_courses.one', alias=course_alias) }}">{{ _('Back to course') }}</a>
-  {% else %}
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@justinribeiro/lite-youtube@1.5.0/lite-youtube.js"></script>
+{% block head %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
   <style>
     .lite-youtube-fallback {
       aspect-ratio: 16 / 9; /* matches YouTube player */
@@ -37,17 +33,37 @@
       outline: 2px solid red;
     }
   </style>
-  <h1>{{ day.title }}</h1>
-  <p>{{ day.description }}</p>
-  {{ day.text }}
-  {% if day.youtube_id %}
-    <lite-youtube class="my-4" videotitle="This is a video title" params="rel=0" videoid="{{ day.youtube_id }}"></lite-youtube>
-  {% endif %}
-  <form method="post" action="{{ url_for('user_courses.day_complete', alias=course_alias, week_id=day.week.id, day_id=day.id) }}">
-    {% if not day.is_complete %}
-      <button class="btn btn-success me-2" type="submit">{{ _('Task completed') }}</button>
-    {% endif %}
+{% endblock head %}
+
+{% block user_content %}
+  {% if timedelta %}
+    <p>Это задание откроется через {{ timedelta | humanize_td }}.</p>
     <a class="btn btn-secondary" href="{{ url_for('user_courses.one', alias=course_alias) }}">{{ _('Back to course') }}</a>
-  </form>
+  {% else %}
+    <h1>{{ day.title }}</h1>
+    <p>{{ day.description }}</p>
+    {{ text_md or day.text }}
+    {% if day.youtube_id %}
+      <lite-youtube class="my-4" videotitle="This is a video title" params="rel=0" videoid="{{ day.youtube_id }}"></lite-youtube>
+    {% endif %}
+    <form method="post" action="{{ url_for('user_courses.day_complete', alias=course_alias, week_id=day.week.id, day_id=day.id) }}">
+      {% if not day.is_complete %}
+        <button class="btn btn-success me-2" type="submit">{{ _('Task completed') }}</button>
+      {% endif %}
+      <a class="btn btn-secondary" href="{{ url_for('user_courses.one', alias=course_alias) }}">{{ _('Previous day') }} {{ prev_day.id }} {{ prev_day.title }}</a>
+      <a class="btn btn-secondary" href="{{ url_for('user_courses.one', alias=course_alias) }}#cid{{ day.week.course.id }}-wid{{ day.week.id }}-did{{ day.id }}">{{ _('Back to course') }}</a>
+      <a class="btn btn-secondary" href="{{ url_for('user_courses.one', alias=course_alias) }}">{{ _('Next day') }} {{ next_day.id }} {{ next_day.title }}</a>
+    </form>
   {% endif %}
 {% endblock user_content %}
+
+{% block js %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@justinribeiro/lite-youtube@1.5.0/lite-youtube.js"></script>
+{% endblock js %}
+{#
+  <p>Codepen embed:</p>
+  <p data-height="265" data-theme-id="0" data-slug-hash="vGNKNj" data-default-tab="css,result" data-user="blonfu" data-embed-version="2" class="codepen">See the Pen <a href="http://codepen.io/blonfu/pen/vGNKNj/">Modificar color de texto según fondo (stylus)</a> by blonfu (<a href="http://codepen.io/blonfu">@blonfu</a>) on <a href="http://codepen.io">CodePen</a>.</p>
+  <script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+#}
