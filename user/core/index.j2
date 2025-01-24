@@ -2,16 +2,14 @@
 
 {% block admin_content %}
   <h1>{{ _('Personal user area') }}</h1>
+  <ul class="nav nav-pills">
+    {% for link in user_links %}
+      <li class="nav-item">
+        <a class="nav-link" aria-current="page" href="{{ url_for(link.controller) }}">{{ link.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
   <div class="flex">
-    <div class="h-full space-y-2 w-56">
-      <div class="w-48 text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-        {% for link in user_links %}
-          <a class="{%- if loop.first -%}rounded-t-lg{%- elif loop.last -%} rounded-b-lg{%- endif %} relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white" href="{{ url_for(link.controller) }}">
-            {{- link.title -}}
-          </a>
-        {% endfor %}
-      </div>
-    </div>
     <ul>
       <li><strong>{{ _('Username') }}</strong>: {{ current_user.username }}</li>
       <li><strong>{{ _('Email') }}</strong>: {{ current_user.email }}</li>
