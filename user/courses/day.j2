@@ -42,7 +42,7 @@
   {% else %}
     <h1>{{ day.title }}</h1>
     <p>{{ day.description }}</p>
-    {{ text_md or day.text }}
+    {{ text }}
     {% if day.youtube_id %}
       <lite-youtube class="my-4" videotitle="This is a video title" params="rel=0" videoid="{{ day.youtube_id }}"></lite-youtube>
     {% endif %}
@@ -50,9 +50,9 @@
       {% if not day.is_complete %}
         <button class="btn btn-success me-2" type="submit">{{ _('Task completed') }}</button>
       {% endif %}
-      <a class="btn btn-secondary" href="{{ url_for('user_courses.one', alias=course_alias) }}">{{ _('Previous day') }} {{ prev_day.id }} {{ prev_day.title }}</a>
+      {# <a class="btn btn-secondary" href="{{ url_for('user_courses.one', alias=course_alias) }}">{{ _('Previous day') }} {{ prev_day.id }} {{ prev_day.title }}</a> #}
       <a class="btn btn-secondary" href="{{ url_for('user_courses.one', alias=course_alias) }}#cid{{ day.week.course.id }}-wid{{ day.week.id }}-did{{ day.id }}">{{ _('Back to course') }}</a>
-      <a class="btn btn-secondary" href="{{ url_for('user_courses.one', alias=course_alias) }}">{{ _('Next day') }} {{ next_day.id }} {{ next_day.title }}</a>
+      {# <a class="btn btn-secondary" href="{{ url_for('user_courses.one', alias=course_alias) }}">{{ _('Next day') }} {{ next_day.id }} {{ next_day.title }}</a> #}
     </form>
   {% endif %}
 {% endblock user_content %}
